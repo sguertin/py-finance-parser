@@ -5,9 +5,9 @@ from py_finance_parser.models.transaction import Transaction, TransactionList, C
 
 
 class FilteringService:
-    file_path: str
+    file_path: Path
 
-    def __init__(self, file_path):
+    def __init__(self, file_path: Path):
         self.file_path = file_path
 
     def filter_transactions(self, transaction_list: TransactionList) -> None:
@@ -30,7 +30,7 @@ class FilteringService:
         return False
 
     def get_filter_list(self) -> FilterList:
-        if not Path(self.file_path).exists():
+        if not self.file_path.exists():
             return FilterList()
         with open(self.file_path, "r+") as f:
             FilterList.from_json(f.read())

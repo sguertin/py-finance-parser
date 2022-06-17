@@ -1,7 +1,10 @@
+from pathlib import Path
 import re
 
 from dataclasses import dataclass
 from dataclasses_json import DataClassJsonMixin
+
+from constants import DEFAULT_FILTERS
 
 
 @dataclass(frozen=True)
@@ -32,4 +35,15 @@ class Filter(DataClassJsonMixin):
 
 @dataclass
 class FilterList(DataClassJsonMixin):
-    filters: list[Filter]
+    filters: list[Filter] = []
+
+    @classmethod
+    def load(cls, file_path: Path = DEFAULT_FILTERS) -> "FilterList":
+        if not file_path.exists():
+            return cls()
+        with open(file_path, "r+") as f:
+            cls.from_json(f.read())
+
+    def save(self, file_path: Path = DEFAULT_FILTERS) -> None:
+        with open(file_path, "w+") as f:
+            f.write(self.to_json())
