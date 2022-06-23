@@ -16,7 +16,7 @@ class ListDataClassJsonMixin(DataClassJsonMixin):
 
     @classmethod
     def json_to_list(cls, json_string: str) -> list:
-        """Deserialized a json string into a list of instances of this class
+        """Deserializes a json string into a list of instances of this class
 
         Args:
             json_string (str): the json string to deserialize into a list
