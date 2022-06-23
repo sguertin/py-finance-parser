@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from py_finance_parser.models.filter import FilterList, Filter
+from py_finance_parser.models.filter import Filter
 from py_finance_parser.models.transaction import Transaction, TransactionList, Category
 
 
@@ -18,8 +18,8 @@ class FilteringService:
             if trx.category == Category.UNCATEGORIZED
         ]
 
-    def filter_transaction(self, trx: Transaction, filter_list: FilterList):
-        for filter in filter_list.filters:
+    def filter_transaction(self, trx: Transaction, filter_list: list[Filter]):
+        for filter in filter_list:
             if self.apply_filter(trx, filter):
                 break
 
@@ -29,12 +29,12 @@ class FilteringService:
             return True
         return False
 
-    def get_filter_list(self) -> FilterList:
+    def get_filter_list(self) -> list[Filter]:
         if not self.file_path.exists():
-            return FilterList()
+            return []
         with open(self.file_path, "r+") as f:
-            FilterList.from_json(f.read())
+            Filter.json_to_list(f.read())
 
-    def save_filter_list(self, filter_list: FilterList) -> None:
+    def save_filter_list(self, filter_list: list[Filter]) -> None:
         with open(self.file_path, "w+") as f:
-            f.write(filter_list.to_json())
+            f.write(Filter.list_to_json(filter_list))

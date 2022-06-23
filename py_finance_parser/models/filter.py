@@ -1,14 +1,13 @@
+from dataclasses import dataclass
 from pathlib import Path
 import re
 
-from dataclasses import dataclass
-from dataclasses_json import DataClassJsonMixin
-
-from constants import DEFAULT_FILTERS
+from py_finance_parser.constants import DEFAULT_FILTERS
+from py_finance_parser.mixins.dataclasses_json import ListDataClassJsonMixin
 
 
 @dataclass(frozen=True)
-class Filter(DataClassJsonMixin):
+class Filter(ListDataClassJsonMixin):
     name: str
     filter_expression: str
     category: str
@@ -31,19 +30,3 @@ class Filter(DataClassJsonMixin):
 
     def __ne__(self, val: "Filter") -> bool:
         return self.order != val.order
-
-
-@dataclass
-class FilterList(DataClassJsonMixin):
-    filters: list[Filter] = []
-
-    @classmethod
-    def load(cls, file_path: Path = DEFAULT_FILTERS) -> "FilterList":
-        if not file_path.exists():
-            return cls()
-        with open(file_path, "r+") as f:
-            cls.from_json(f.read())
-
-    def save(self, file_path: Path = DEFAULT_FILTERS) -> None:
-        with open(file_path, "w+") as f:
-            f.write(self.to_json())
