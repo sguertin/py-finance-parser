@@ -1,8 +1,6 @@
 from dataclasses import dataclass
-from pathlib import Path
 import re
 
-from py_finance_parser.constants import DEFAULT_FILTERS
 from py_finance_parser.mixins.dataclasses_json import ListDataClassJsonMixin
 
 

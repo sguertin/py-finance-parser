@@ -1,23 +1,28 @@
 from pathlib import Path
 
+from py_finance_parser.constants import DEFAULT_FILTERS
 from py_finance_parser.models.filter import Filter
-from py_finance_parser.models.transaction import Transaction, TransactionList, Category
+from py_finance_parser.models.transaction import Transaction
 
 
 class FilteringService:
     file_path: Path
 
-    def __init__(self, file_path: Path):
+    def __init__(self, file_path: Path = None):
+        if file_path is None:
+            file_path = DEFAULT_FILTERS
         self.file_path = file_path
 
-    def filter_transactions(self, transaction_list: TransactionList) -> None:
+    def filter_transactions(self, transactions: list[Transaction]) -> None:
         filter_list = self.get_filter_list()
         return [
             self.filter_transaction(trx, filter_list)
-            for trx in transaction_list.transactions
-            if trx.category == Category.UNCATEGORIZED
+            for trx in transactions
         ]
 
+    def get_matches_for_filter(self, transactions: list[Transaction], filter: Filter):
+        return [trx for trx in transactions if filter.match(trx.description)]
+    
     def filter_transaction(self, trx: Transaction, filter_list: list[Filter]):
         for filter in filter_list:
             if self.apply_filter(trx, filter):
