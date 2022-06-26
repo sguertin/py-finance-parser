@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from py_finance_parser.constants import DEFAULT_FILTERS_FILES
 from py_finance_parser.models.filter import Filter
 from py_finance_parser.models.transaction import Transaction, TransactionList, Category
 
@@ -7,7 +8,9 @@ from py_finance_parser.models.transaction import Transaction, TransactionList, C
 class FilteringService:
     file_path: Path
 
-    def __init__(self, file_path: Path):
+    def __init__(self, file_path: Path = None):
+        if file_path is None:
+            file_path = DEFAULT_FILTERS_FILES
         self.file_path = file_path
 
     def filter_transactions(self, transaction_list: TransactionList) -> None:
