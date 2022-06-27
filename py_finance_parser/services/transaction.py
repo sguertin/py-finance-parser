@@ -10,15 +10,14 @@ class TransactionFileParsingService:
     def __init__(self, file_path: Path):
         self.file_path = file_path
 
-    def parse_transaction_file(self, starting_id: int = 1) -> TransactionList:
+    def parse_csv_file(self, starting_id: int = 1) -> list[Transaction]:
         with open(self.file_path, "r+") as f:
             contents = [_ for _ in csv.reader(f)]
-            result = [
+            return [
                 Transaction.create_from_csv_row(n + starting_id, row)
                 for n, row in enumerate(contents)
             ]
-        return TransactionList(result)
 
-    def save_parsed_transaction_file(self, transactions: TransactionList) -> None:
+    def save_parsed_transaction_file(self, transactions: list[Transaction]) -> None:
         with open(self.file_path, "w+") as f:
-            f.write(transactions.to_json())
+            f.write(Transaction.list_to_json(transactions))
