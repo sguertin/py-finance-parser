@@ -13,9 +13,13 @@ class Condition(metaclass=ABCMeta):
     @classmethod
     def __subclasshook__(cls, subclass):
         return (
-            hasattr(subclass, "match") and callable(subclass.match)
+            hasattr(subclass, "match") and callable(subclass.match) and
+            hasattr(subclass, "get_query") and callable(subclass.get_query)
         ) or NotImplemented
 
+    def get_query(self):
+        raise NotImplementedError(self.get_query)
+    
     @abstractmethod
     def match(self, df: DataFrame) -> Series:
         raise NotImplementedError(self.match)
@@ -38,7 +42,10 @@ class Filter:
 @dataclass(slots=True)
 class StringMatchCondition(Condition):
     match_phrase: str
-
+    
+    def get_query(self):
+        return f"{Column.DESCRIPTION}.str.contains('{self.match_phrase}')"
+    
     def match(self, df: DataFrame) -> Series:
         df[str(Column.DESCRIPTION)].str.contains(self.match_phrase, flags=re.IGNORECASE)
 
