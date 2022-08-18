@@ -48,6 +48,18 @@ class Column(StringEnum):
     ID = "id"
 
 
+class ColumnIndex(IntEnum):
+    """An enumeration of the column index values for the csv file"""
+
+    DATE = 0
+    DESCRIPTION = 1
+    AMOUNT = 2
+    RUNNING_BALANCE = 3
+    CATEGORY = 4
+    TAGS = 5
+    ID = 6
+
+
 class Comparison(StringEnum):
     GREATER_THAN = ">"
     GREATER_THAN_EQUAL_TO = ">="
