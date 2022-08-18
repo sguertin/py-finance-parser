@@ -3,8 +3,6 @@ from datetime import datetime
 from enum import Enum, IntEnum
 from dataclasses_json import DataClassJsonMixin
 
-from py_finance_parser.mixins.dataclasses_json import ListDataClassJsonMixin
-
 
 class Columns(IntEnum):
     DATE = 0
@@ -30,8 +28,8 @@ class Category(Enum):
     FITNESS = "Gym Fees"
 
 
-@dataclass
-class Transaction(ListDataClassJsonMixin):
+@dataclass(slots=True)
+class Transaction(DataClassJsonMixin):
     id: int
     date: datetime
     description: str
@@ -70,7 +68,7 @@ class Transaction(ListDataClassJsonMixin):
         return self.id <= trx.id
 
 
-@dataclass
+@dataclass(slots=True)
 class TransactionList(DataClassJsonMixin):
     transactions: list[Transaction]
     created: datetime
