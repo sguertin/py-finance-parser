@@ -6,7 +6,7 @@ import re
 
 from pandas import DataFrame, Series
 
-from models import Category, Comparison, Column
+from models.enums import Category, Comparison, Column
 
 
 class Condition(metaclass=ABCMeta):
